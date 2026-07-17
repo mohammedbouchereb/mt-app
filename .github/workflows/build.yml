@@ -1,0 +1,32 @@
+name: Build APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Buildozer dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libbz2-dev libreadline-dev libssl-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libpcap-dev xz-utils libffi-dev libgpm2 libtinfo5 libtinfo-dev
+
+    - name: Install Buildozer and Cython
+      run: |
+        pip install --upgrade pip
+        pip install buildozer cython==0.29.33 kivy requests arabic-reshaper python-bidi
+
+    - name: Build with Buildozer
+      run: buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: package
+        path: bin/*.apk
