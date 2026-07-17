@@ -21,14 +21,15 @@ jobs:
 
     - name: Build APK
       run: |
-        mkdir -p ~/.android
-        touch ~/.android/repositories.cfg
-        # استخدام نمط هادئ للـ buildozer لتقليل حجم السجلات
-        buildozer android debug 2>&1 | tail -n 100
+        # تنظيف أي بناء سابق لضمان المساحة
+        buildozer clean
+        # البناء مع وضع عدم التوقف
+        buildozer android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: package
         path: bin/*.apk
+        if-no-files-found: error
         
