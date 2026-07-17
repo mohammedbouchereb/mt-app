@@ -15,13 +15,15 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install Dependencies
+           - name: Install Dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libbz2-dev libreadline-dev libssl-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libpcap-dev xz-utils libffi-dev libgpm2 libtinfo5 libtinfo-dev
         pip install --upgrade pip
         pip install buildozer cython==0.29.33 kivy requests arabic-reshaper python-bidi
-
+        # إضافة هذا السطر لقبول التراخيص تلقائياً
+        mkdir -p ~/.android && touch ~/.android/repositories.cfg
+        
     - name: Build APK
       run: |
         buildozer android debug
