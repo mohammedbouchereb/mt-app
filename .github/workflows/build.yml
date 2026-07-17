@@ -10,7 +10,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
 
     - name: Install Buildozer dependencies
       run: |
@@ -24,9 +24,9 @@ jobs:
 
     - name: Fix Buildozer Spec Config
       run: |
-        # تغيير إصدار بايثون وإصدار الأندرويد تلقائياً داخل الملف قبل البناء
-        sed -i 's/# android.python_version = .*/android.python_version = 3.10/' buildozer.spec
-        sed -i 's/android.python_version = .*/android.python_version = 3.10/' buildozer.spec
+        # إجبار الملف على استخدام إصدار 3.11 وإصدار أندرويد متوافق
+        sed -i 's/# android.python_version = .*/android.python_version = 3.11/' buildozer.spec
+        sed -i 's/android.python_version = .*/android.python_version = 3.11/' buildozer.spec
         sed -i 's/android.api = .*/android.api = 33/' buildozer.spec
 
     - name: Build with Buildozer
