@@ -12,28 +12,19 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install Buildozer dependencies
+    - name: Install Dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libbz2-dev libreadline-dev libssl-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libpcap-dev xz-utils libffi-dev libgpm2 libtinfo5 libtinfo-dev
-
-    - name: Install Buildozer and Cython
-      run: |
         pip install --upgrade pip
         pip install buildozer cython==0.29.33 kivy requests arabic-reshaper python-bidi
 
-    - name: Fix Buildozer Spec Config
-      run: |
-        # إجبار الملف على استخدام إصدار 3.11 وإصدار أندرويد متوافق
-        sed -i 's/# android.python_version = .*/android.python_version = 3.11/' buildozer.spec
-        sed -i 's/android.python_version = .*/android.python_version = 3.11/' buildozer.spec
-        sed -i 's/android.api = .*/android.api = 33/' buildozer.spec
-
-    - name: Build with Buildozer
+    - name: Build APK
       run: |
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
-        yes | buildozer android debug
+        # استخدام نمط هادئ للـ buildozer لتقليل حجم السجلات
+        buildozer android debug 2>&1 | tail -n 100
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
